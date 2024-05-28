@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
     private final MessageSource messageSource;
@@ -26,7 +30,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleGeneralException(Exception ex, WebRequest request) {
-        ApiResponse<Void> response = ApiResponse.error(HttpStatus.BAD_REQUEST.value(), MessageCode.ERROR, null, messageSource);
+    	// TODO revisar
+    	List<String> errors = new ArrayList<String>();
+    	errors.add(ex.getMessage());
+    	
+        ApiResponse<Void> response = ApiResponse.error(HttpStatus.BAD_REQUEST.value(), MessageCode.ERROR, errors, messageSource);
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
